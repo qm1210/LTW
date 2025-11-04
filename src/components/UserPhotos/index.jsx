@@ -48,7 +48,7 @@ export default function UserPhotos() {
       {photos.length === 0 && <div>No photos.</div>}
 
       {photos.map((p) => {
-        const imgSrc = getImage(p.file_name); // ← load từ src/images
+        const imgSrc = getImage(p.file_name); 
 
         return (
           <div key={p._id} className="photo-card" style={{ marginBottom: 24 }}>
@@ -60,7 +60,7 @@ export default function UserPhotos() {
               />
             ) : (
               <div style={{ color: "#b00" }}>
-                Không tìm thấy ảnh: <code>{p.file_name}</code> (đặt file trong <code>src/images</code>)
+                Không tìm thấy ảnh
               </div>
             )}
 
@@ -70,7 +70,7 @@ export default function UserPhotos() {
 
             <div style={{ marginTop: 12 }}>
               <b>Comments:</b>
-              {(!p.comments || p.comments.length === 0) && <div>—</div>}
+              {(!p.comments || p.comments.length === 0) && <div>No comments</div>}
               {p.comments?.map((c) => (
                 <div key={c._id} style={{ padding: "8px 0", borderBottom: "1px solid #eee" }}>
                   <div style={{ marginBottom: 4 }}>
