@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useParams, useLocation, Link } from "react-router-dom";
-import models from "../../modelData/models";
+import fetchModel from "../../lib/fetchModelData";
 import "./styles.css";
 
 // 🔹 Tạo loader cho tất cả ảnh trong src/images (chỉ làm 1 lần ở module scope)
@@ -30,14 +30,30 @@ export default function UserPhotos() {
   const maybeNum = Number(rawId);
   const userId = Number.isNaN(maybeNum) ? rawId : maybeNum;
 
-  const user =
-    models.userModel(userId) ??
-    models.userModel(String(userId));
+  const [user, setUser] = useState(null);
+  const [photos, setPhotos] = useState([]);
 
-  const photos =
-    models.photoOfUserModel(userId) ??
-    models.photoOfUserModel(String(userId)) ??
-    [];
+  useEffect(() => {
+    // Fetch user data
+    fetchModel(`/user/${userId}`)
+      .then((userData) => {
+        setUser(userData);
+      })
+      .catch((error) => {
+        console.error("Error fetching user:", error);
+        setUser(null);
+      });
+
+    // Fetch photos
+    fetchModel(`/photosOfUser/${userId}`)
+      .then((photoData) => {
+        setPhotos(photoData || []);
+      })
+      .catch((error) => {
+        console.error("Error fetching photos:", error);
+        setPhotos([]);
+      });
+  }, [userId]);
 
   if (!user) return <div>User not found.</div>;
 

@@ -1,7 +1,7 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Typography, Card, CardContent, Button, Box } from "@mui/material";
 import { Link, useParams } from "react-router-dom";
-import models from "../../modelData/models";
+import fetchModel from "../../lib/fetchModelData";
 
 import "./styles.css";
 
@@ -10,9 +10,18 @@ import "./styles.css";
  */
 function UserDetail() {
     const { userId } = useParams();
+    const [user, setUser] = useState(null);
     
-    // Get user data from models
-    const user = models.userModel(userId);
+    useEffect(() => {
+        fetchModel(`/user/${userId}`)
+            .then((userData) => {
+                setUser(userData);
+            })
+            .catch((error) => {
+                console.error("Error fetching user detail:", error);
+                setUser(null);
+            });
+    }, [userId]);
     
     if (!user) {
         return (

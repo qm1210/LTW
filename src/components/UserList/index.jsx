@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
     List,
     ListItem,
@@ -8,7 +8,7 @@ import {
     Divider
 } from "@mui/material";
 import { Link } from "react-router-dom";
-import models from "../../modelData/models";
+import fetchModel from "../../lib/fetchModelData";
 
 import "./styles.css";
 
@@ -16,8 +16,17 @@ import "./styles.css";
  * Define UserList, a React component of Project 4.
  */
 function UserList() {
-    // Get all users from models
-    const users = models.userListModel();
+    const [users, setUsers] = useState([]);
+
+    useEffect(() => {
+        fetchModel("/user/list")
+            .then((userList) => {
+                setUsers(userList);
+            })
+            .catch((error) => {
+                console.error("Error fetching user list:", error);
+            });
+    }, []);
 
     return (
         <div>
