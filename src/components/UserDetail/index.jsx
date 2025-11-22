@@ -11,17 +11,29 @@ import "./styles.css";
 function UserDetail() {
     const { userId } = useParams();
     const [user, setUser] = useState(null);
+    const [loading, setLoading] = useState(true);
     
     useEffect(() => {
+        setLoading(true);
         fetchModel(`/user/${userId}`)
             .then((userData) => {
                 setUser(userData);
+                setLoading(false);
             })
             .catch((error) => {
                 console.error("Error fetching user detail:", error);
                 setUser(null);
+                setLoading(false);
             });
     }, [userId]);
+    
+    if (loading) {
+        return (
+            <Typography variant="h6" sx={{ p: 2 }}>
+                Loading...
+            </Typography>
+        );
+    }
     
     if (!user) {
         return (

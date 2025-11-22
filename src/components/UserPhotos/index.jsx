@@ -32,16 +32,20 @@ export default function UserPhotos() {
 
   const [user, setUser] = useState(null);
   const [photos, setPhotos] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    setLoading(true);
     // Fetch user data
     fetchModel(`/user/${userId}`)
       .then((userData) => {
         setUser(userData);
+        setLoading(false);
       })
       .catch((error) => {
         console.error("Error fetching user:", error);
         setUser(null);
+        setLoading(false);
       });
 
     // Fetch photos
@@ -55,6 +59,7 @@ export default function UserPhotos() {
       });
   }, [userId]);
 
+  if (loading) return <div>Loading...</div>;
   if (!user) return <div>User not found.</div>;
 
   return (
